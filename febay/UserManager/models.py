@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
@@ -67,6 +68,5 @@ class customer(models.Model):
     	max_length = 15,
     	choices = STATE_CHOICES,
     	)
-
 
 
