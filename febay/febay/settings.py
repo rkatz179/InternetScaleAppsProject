@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'ItemManager',
     'UserManager',
     'CommentManager',
-    'rest_framework',
+
 ]
 
 MIDDLEWARE = [
