@@ -19,6 +19,7 @@ from CommentManager import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('CommentManager.urls'))
+    url(r'^comments/', include('CommentManager.urls')),
+    url(r'^items/',  include('ItemManager.urls'))
 ]
 
