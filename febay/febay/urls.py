@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-
+from CommentManager import views
 
 urlpatterns = [
    url(r'^admin/', admin.site.urls),
    url(r'^auth/', include('UserManager.urls')),
    url(r'^items/',  include('ItemManager.urls')),
+   url(r'^comments/', include('CommentManager.urls')),
+
 ]
 
