@@ -7,6 +7,7 @@ from django.utils import timezone
 from UserManager.models import customer
 from ItemManager.models import Item
 
+
 # Create your models here.
 
 class Comment(models.Model):

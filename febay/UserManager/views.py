@@ -47,34 +47,69 @@ def get_user(request,id):
 			pass
 	return JsonResponse(response)
 
-# @csrf_exempt
-# def get_users(request):
-#     users = customer.objects.all().values('username','first_name', 'last_name')  # or simply .values() to get all fields
-#     users_list = list(users)  # important: convert the QuerySet to a list object
-#     return JsonResponse(users_list, safe=False)
+@csrf_exempt
+def get_users(request):
+    users = customer.objects.all().values('username','first_name', 'last_name')  # or simply .values() to get all fields
+    users_list = list(users)  # important: convert the QuerySet to a list object
+    return JsonResponse(users_list, safe=False)
 
-# def login_view(request):
-#     if request.method == 'POST':
-#         login_form = LoginForm(data=request.POST)
-#         username = request.POST.get('username')
-#         password = request.POST.get('password')
-#         user = authenticate(username=username, password=password)
-#         if user is not None:
-#             if user.is_active:
-#                 login(request, user)
-#                 return HttpResponseRedirect('/')
-#             else:
-#                 print("You have a disabled account")
-#         else:
-#             print("You were not found")
-#     else:
-#         login_form = LoginForm()
-#     return render(request , 'login.html', {'login_form': login_form})
+@csrf_exempt
+def login(request):
+	status = {}
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		user = authenticate(username=username, password=password)
+		if user is not None:
+			if user.is_active:
+				login(request, user)
+				status['status'] = {'successful login'}
+			else:
+				status['status'] = {'inactive user'}
+		else:
+			status['status'] = {'user not found'}
+	return JsonResponse({'response':status})
+
+@csrf_exempt
+def logout(request):
+	status = {}
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		logout(customer.objects.get(username = username))
+		status['status'] = {'sucessfully logged out',username}
+	return JsonResponse({'response':status})
 
 
-# def logout_view(request):
-#     login_form = LoginForm()
-#     print(request.user)
-#     logout(request)
-#     print(request.user)
-#     return HttpResponseRedirect('/login')
+@csrf_exempt
+def delete_user(request):
+	status = {}
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		u = User.objects.get(username = username)
+		if u is not None:
+			u.delete()
+			status['status'] = {'sucessfully deleted user',username}
+		status['status'] = {'user not found',username}
+	else:
+		status['status'] = {'unsuccessful deletion of user',username}
+	return JsonResponse({'response':status})
+
+@csrf_exempt
+def update_user_email(request):
+	status = {}
+	response = {}
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		new_email = request.POST.get('new_email')
+		user = customer.objects.get(username = username)
+		user.email = new_email
+		user.save()
+		response[user.username] = {'first name': user.first_name,'last name': user.last_name, 
+			'username': user.username, 'email': user.email, 'state':user.state, 
+			'city':user.city, 'phone number': user.phone_number,'id':user.id}
+		status['status'] = 'sucess'
+	else:
+		status['status'] = 'failure'
+	return JsonResponse({'response':response})
+    	
+
