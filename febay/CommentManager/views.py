@@ -17,11 +17,11 @@ from django.shortcuts import render
 def createComment(request):
 	if request.method == 'POST' and request.POST:
 		try:
-			phone_number = request.POST.get('phone_number', False)
+			username = request.POST.get('username', False)
 			if not phone_number:
-				return JsonResponse({'response': phone_number})
+				return JsonResponse({'response': username})
 			try:
-				user = customer.objects.get(phone_number=int(phone_number))
+				user = customer.objects.get(username=username)
 			except Exception as e:
 				return JsonResponse({'response': str(e)})
 			if not user:
@@ -50,7 +50,7 @@ def getComment(request, pk):
 			try:
 				comment = Comment.objects.get(id=id)
 				response = {
-					"user": comment.user.user.username,
+					"user": comment.user.username,
 					"item": comment.item.title,
 					"message": comment.message,
 					"date_posted": comment.date_posted
@@ -109,7 +109,7 @@ def getCommentList(request, pk):
 				for comment in comments:
 					c = {
 						'message': comment.message,
-						'user': comment.user.user.username,
+						'user': comment.user.username,
 						'date_posted': comment.date_posted
 					}
 					comment_list.append(c.copy())

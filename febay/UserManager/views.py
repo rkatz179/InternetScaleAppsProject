@@ -29,10 +29,9 @@ def register_user(request):
 			phone_number = request.POST.get('phone_number'),
 			password = request.POST.get('password')
 			)
-		# user.save()
-		return JsonResponse({'Response':{'first name': user.first_name,'last name': user.last_name, 
-			'username': user.username, 'email': user.email, 'state':user.state, 
-			'city':user.city, 'phone number': user.phone_number,'id':user.id}})
+		return JsonResponse({'Response':{'first name': user.first_name,'last name': user.last_name, 'username': user.username, 'email': user.email, 'state':user.state, 'city':user.city, 'phone number': user.phone_number,'id':user.id}})
+	else:
+		return JsonResponse({'Response': 'Could not register user'})
 
 @csrf_exempt
 def get_user(request,id):

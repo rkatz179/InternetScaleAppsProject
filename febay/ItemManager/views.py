@@ -6,6 +6,7 @@ from django.shortcuts import render
 from datetime import date
 from UserManager.models import *
 from .models import *
+from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 
 def getItemList(request):
@@ -25,8 +26,8 @@ def getItem(request, id):
         item = Item.objects.get(id = id)
         response[item.pk] = {'title': item.title, 'description': item.description, 'price':item.price, 'date-posted': item.date_posted,
                              'category': item.category, 'owner': item.owner.username}
-    except():
-        pass
+    except ObjectDoesNotExist:
+                return JsonResponse({'status': 'error', 'response': 'no object found'})
     return JsonResponse(response)
 
 def create(request):
